@@ -6,6 +6,31 @@ const uploadFile = {
   })
 };
 
+const deleteFile = {
+  params: Joi.object().keys({
+    fileId: Joi.number().integer().required()
+  })
+};
+
+const renameFile = {
+  params: Joi.object().keys({
+    fileId: Joi.number().integer().required()
+  }),
+  body: Joi.object().keys({
+    newName: Joi.string().required()
+  })
+};
+
+const moveFile = {
+  params: Joi.object().keys({
+    fileId: Joi.number().integer().required(),
+    destinationId: Joi.number().integer().required()
+  })
+};
+
 export default {
-  uploadFile
+  uploadFile,
+  deleteFile,
+  renameFile,
+  moveFile
 };

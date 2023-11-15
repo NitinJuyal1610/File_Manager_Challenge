@@ -14,6 +14,37 @@ const uploadFile = catchAsync(async (req, res) => {
   });
 });
 
+const deleteFile = catchAsync(async (req, res) => {
+  const { fileId } = req.params;
+  const user = req.user as User;
+  await fileService.deleteFile(fileId, user);
+  return res.status(httpStatus.OK).json({
+    message: `File with id ${fileId} deleted successfully`
+  });
+});
+
+const renameFile = catchAsync(async (req, res) => {
+  const { fileId } = req.params;
+  const { newName } = req.body;
+  const user = req.user as User;
+  await fileService.renameFile(fileId, user, newName);
+  return res.status(httpStatus.OK).json({
+    message: `File with id ${fileId} renamed successfully`
+  });
+});
+
+const moveFile = catchAsync(async (req, res) => {
+  const { fileId, destinationId } = req.params;
+  const user = req.user as User;
+  await fileService.moveFile(fileId, user, destinationId);
+  return res.status(httpStatus.OK).json({
+    message: `File with id ${fileId} moved successfully`
+  });
+});
+
 export default {
-  uploadFile
+  uploadFile,
+  deleteFile,
+  renameFile,
+  moveFile
 };

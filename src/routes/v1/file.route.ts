@@ -15,4 +15,16 @@ router
     fileController.uploadFile
   );
 
+router
+  .route('/:fileId')
+  .delete(auth('deleteFile'), validate(fileValidation.deleteFile), fileController.deleteFile);
+
+router
+  .route('/:fileId/rename')
+  .patch(auth('renameFile'), validate(fileValidation.renameFile), fileController.renameFile);
+
+router
+  .route('/:fileId/move/:destinationId')
+  .patch(auth('moveFile'), validate(fileValidation.moveFile), fileController.moveFile);
+
 export default router;

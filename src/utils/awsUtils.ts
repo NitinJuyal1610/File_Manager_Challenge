@@ -1,4 +1,12 @@
-import { CreateBucketCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  CreateBucketCommand,
+  DeleteObjectCommand,
+  PutObjectCommand,
+  CopyObjectCommand,
+  S3Client
+} from '@aws-sdk/client-s3';
+
+import path from 'path';
 import config from '../config/config';
 import logger from '../config/logger';
 import { createReadStream } from 'fs';
@@ -64,5 +72,37 @@ export const uploadFile = async function (targetPath: string, fileName: string, 
   } catch (e) {
     logger.error(e);
     throw e;
+  }
+};
+
+export const deleteObject = async (key: string) => {
+  const command = new DeleteObjectCommand({
+    Bucket: config.aws.bucketName,
+    Key: key
+  });
+
+  try {
+    await client.send(command);
+    return true;
+  } catch (err) {
+    logger.error(err);
+    throw err;
+  }
+};
+
+export const moveObject = async (key: string, newLocation: string) => {
+  const command = new CopyObjectCommand({
+    Bucket: config.aws.bucketName,
+    CopySource: `${config.aws.bucketName}/${key}`,
+    Key: newLocation
+  });
+
+  try {
+    await client.send(command);
+    await deleteObject(key);
+    return true;
+  } catch (err) {
+    logger.error(err);
+    throw err;
   }
 };

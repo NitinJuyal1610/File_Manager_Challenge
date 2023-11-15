@@ -1,6 +1,7 @@
 import prisma from '../client';
 import { Strategy as JwtStrategy, ExtractJwt, VerifyCallback } from 'passport-jwt';
 import config from './config';
+import { User } from '@prisma/client';
 
 const jwtOptions = {
   secretOrKey: config.jwt.secret,

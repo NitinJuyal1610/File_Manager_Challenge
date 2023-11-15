@@ -17,7 +17,34 @@ model User {
   password        String
   role            Role     @default(USER)
   createdAt       DateTime @default(now())
+  folders         Folder[]
+  files           File[]
   updatedAt       DateTime @updatedAt
+}
+
+model Folder{
+  id              Int       @id @default(autoincrement())
+  name            String    
+  userId          Int       
+  user            User      @relation(fields: [userId], references: [id])
+  parentId        Int?       
+  parent          Folder?   @relation("SubFolders",fields: [parentId], references: [id])
+  subFolders      Folder[]  @relation("SubFolders")
+  files           File[]
+  path            String   @unique
+  createdAt       DateTime @default(now())
+}
+
+model File{
+  id              Int      @id @default(autoincrement())
+  name            String   
+  userId          Int 
+  user            User     @relation(fields: [userId], references: [id])
+  folderId        Int
+  folder          Folder?  @relation(fields: [folderId], references: [id])
+  path            String
+  uploadDate      DateTime @default(now())
+  S3Key           String
 }
 
 enum Role {

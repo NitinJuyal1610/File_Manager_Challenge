@@ -34,7 +34,7 @@ const newSubFolder = async (parentId: number, name: string, user: User): Promise
     throw new ApiError(httpStatus.NOT_FOUND, 'Parent folder not found');
   }
 
-  if (parentFolder.userId !== user.id) {
+  if (parentFolder.userId !== user.id && user.role !== 'ADMIN') {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
   }
 

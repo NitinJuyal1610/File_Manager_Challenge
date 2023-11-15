@@ -15,7 +15,7 @@ const createFile = async (file: Express.Multer.File, folderId: number, user: Use
     throw new ApiError(httpStatus.BAD_REQUEST, 'Folder not found');
   }
 
-  if (!(folder.userId === user.id)) {
+  if (!(folder.userId === user.id && user.role !== 'ADMIN')) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
   }
 
@@ -49,7 +49,7 @@ const deleteFile = async (fileId: number, user: User) => {
   if (!file) {
     throw new ApiError(httpStatus.NOT_FOUND, 'File not found');
   }
-  if (file.userId !== user.id) {
+  if (file.userId !== user.id && user.role !== 'ADMIN') {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
   }
 
@@ -68,7 +68,7 @@ const renameFile = async (fileId: number, user: User, newName: string) => {
   if (!file) {
     throw new ApiError(httpStatus.NOT_FOUND, 'File not found');
   }
-  if (file.userId !== user.id) {
+  if (file.userId !== user.id && user.role !== 'ADMIN') {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
   }
 
@@ -109,7 +109,7 @@ const moveFile = async (fileId: number, user: User, folderId: number) => {
   if (!file) {
     throw new ApiError(httpStatus.NOT_FOUND, 'File not found');
   }
-  if (file.userId !== user.id) {
+  if (file.userId !== user.id && user.role !== 'ADMIN') {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
   }
 
@@ -123,7 +123,7 @@ const moveFile = async (fileId: number, user: User, folderId: number) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Destination Folder not found');
   }
 
-  if (!(folder.userId === user.id)) {
+  if (!(folder.userId === user.id && user.role !== 'ADMIN')) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
   }
 

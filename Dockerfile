@@ -1,15 +1,13 @@
-FROM node:alpine
+#BUILD STAGE
+FROM node:18-alpine
 
-RUN mkdir -p /usr/src/node-app && chown -R node:node /usr/src/node-app
-
-WORKDIR /usr/src/node-app
-
-COPY package.json yarn.lock ./
-
-USER node
-
-RUN yarn install --pure-lockfile
-
-COPY --chown=node:node . .
+#DEV
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN yarn install 
+COPY . .
+RUN yarn db:push
 
 EXPOSE 3000
+
+CMD ["yarn","run" ,"dev"]

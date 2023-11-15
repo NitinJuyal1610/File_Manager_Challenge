@@ -2,6 +2,7 @@ import express from 'express';
 import authRoute from './auth.route';
 import userRoute from './user.route';
 import folderRoute from './folder.route';
+import fileRoute from './file.route';
 
 const router = express.Router();
 
@@ -17,6 +18,10 @@ const defaultRoutes = [
   {
     path: '/folders',
     route: folderRoute
+  },
+  {
+    path: '/files',
+    route: fileRoute
   }
 ];
 

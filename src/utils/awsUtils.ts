@@ -49,28 +49,20 @@ export const createEmptyObject = async (key: string) => {
   }
 };
 
-// export const uploadFile = async function (
-//   targetPath: string,
-//   fileName: string,
-//   file: Express.MultipartFile
-// ) {
-//   try {
-//     const parallelUploads3 = new Upload({
-//       client,
-//       params: {
-//         Bucket: config.aws.bucketName,
-//         Key: `${targetPath}${fileName}`,
-//         Body: createReadStream(file.path)
-//       }
-//     });
-
-//     parallelUploads3.on('httpUploadProgress', (progress) => {
-//       console.log(progress);
-//     });
-
-//     await parallelUploads3.done();
-//   } catch (e) {
-//     logger.error(e);
-//     throw e;
-//   }
-// };
+export const uploadFile = async function (targetPath: string, fileName: string, filePath: string) {
+  try {
+    const parallelUploads3 = new Upload({
+      client,
+      params: {
+        Bucket: config.aws.bucketName,
+        Key: targetPath,
+        Body: createReadStream(filePath)
+      }
+    });
+    await parallelUploads3.done();
+    return true;
+  } catch (e) {
+    logger.error(e);
+    throw e;
+  }
+};

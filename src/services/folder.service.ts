@@ -4,25 +4,27 @@ import prisma from '../client';
 import ApiError from '../utils/ApiError';
 import { createEmptyObject } from '../utils/awsUtils';
 
-const newFolder = async (name: string, user: User) => {
+const newFolder = async (name: string, user: User): Promise<Folder | null> => {
   const targetPath = `${name}/`;
   const existingFolder = await getFolder(targetPath);
   if (existingFolder) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Folder already exists with this name');
   }
 
-  await createEmptyObject(targetPath);
-  const folder = await prisma.folder.create({
-    data: {
-      name,
-      userId: user.id,
-      path: targetPath
-    }
-  });
-  return folder;
+  if (await createEmptyObject(targetPath)) {
+    const folder = await prisma.folder.create({
+      data: {
+        name,
+        userId: user.id,
+        path: targetPath
+      }
+    });
+    return folder;
+  }
+  return null;
 };
 
-const newSubFolder = async (parentId: number, name: string, user: User) => {
+const newSubFolder = async (parentId: number, name: string, user: User): Promise<Folder | null> => {
   const parentFolder = await prisma.folder.findUnique({
     where: {
       id: parentId
@@ -41,19 +43,21 @@ const newSubFolder = async (parentId: number, name: string, user: User) => {
   if (existingFolder) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'SubFolder already exists with this name');
   }
-  await createEmptyObject(targetPath);
-  const folder = await prisma.folder.create({
-    data: {
-      name,
-      userId: user.id,
-      parentId,
-      path: targetPath
-    }
-  });
-  return folder;
+  if (await createEmptyObject(targetPath)) {
+    const folder = await prisma.folder.create({
+      data: {
+        name,
+        userId: user.id,
+        parentId,
+        path: targetPath
+      }
+    });
+    return folder;
+  }
+  return null;
 };
 
-const getFolder = async (path: string): Promise<Folder | null> => {
+export const getFolder = async (path: string): Promise<Folder | null> => {
   const folder = await prisma.folder.findUnique({
     where: {
       path: path

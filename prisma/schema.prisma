@@ -24,7 +24,7 @@ model User {
 
 model Folder{
   id              Int       @id @default(autoincrement())
-  name            String    
+  name            String    @unique
   userId          Int       
   user            User      @relation(fields: [userId], references: [id])
   parentId        Int?       
@@ -43,8 +43,8 @@ model File{
   folderId        Int
   folder          Folder?  @relation(fields: [folderId], references: [id])
   path            String
+  size            Int 
   uploadDate      DateTime @default(now())
-  S3Key           String
 }
 
 enum Role {

@@ -1,17 +1,8 @@
 import Joi from 'joi';
 
 const createFolder = {
-  body: Joi.object().keys({
-    name: Joi.string()
-      .regex(/^[^/]*$/)
-      .max(1024)
-      .required()
-  })
-};
-
-const createSubFolder = {
   params: Joi.object().keys({
-    parentId: Joi.number().integer()
+    parentId: Joi.number().integer().optional()
   }),
   body: Joi.object().keys({
     name: Joi.string()
@@ -22,6 +13,5 @@ const createSubFolder = {
 };
 
 export default {
-  createFolder,
-  createSubFolder
+  createFolder
 };

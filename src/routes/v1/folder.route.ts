@@ -18,7 +18,7 @@ router
   .route('/:parentId')
   .post(
     auth('createFolder'),
-    validate(folderValidation.createSubFolder),
+    validate(folderValidation.createFolder),
     folderController.createSubFolder
   );
 

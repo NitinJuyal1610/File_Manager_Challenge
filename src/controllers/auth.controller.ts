@@ -16,7 +16,7 @@ const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
   const token = generateToken(user.id);
-  res.json({ token });
+  res.status(httpStatus.OK).json({ token });
 });
 
 export default {

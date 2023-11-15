@@ -14,6 +14,12 @@ router
     folderController.createFolder
   );
 
-router.route('/:parentId').post(auth('createSubFolder'), folderController.createSubFolder);
+router
+  .route('/:parentId')
+  .post(
+    auth('createFolder'),
+    validate(folderValidation.createSubFolder),
+    folderController.createSubFolder
+  );
 
 export default router;
